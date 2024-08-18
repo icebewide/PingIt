@@ -1,0 +1,2 @@
+# PingIt
+Minimal ping utility
