@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
-version="version 0.95"
+version="[-] Version 0.95"
 target=$1
+b=$(tput bold)
 help() {
-  echo -e "\n\e[00;31m###################################\e[00m" 
-echo -e "\e[00;31m#\e[00m" "\e[00;33mYAPU : Yet another ping utility\e[00m" "\e[00;31m#\e[00m"
+echo -e "\n\e[00;31m###################################\e[00m" 
+echo -e "\e[00;31m#\e[00m" "\e[00;33m PingIt\e[00m" "\e[00;31m#\e[00m"
 echo -e "\e[00;31m###################################\e[00m"
-echo -e "\e[00;33m# Mysite | https://github.com/icebewide/ping.sh \e[00m"
+echo -e "\e[00;33m# Mysite | https://github.com/icebewide/PingIt \e[00m"
 echo -e "\e[00;33m# $version\e[00m\n"
 
                 echo "Usage:"
@@ -18,22 +19,12 @@ echo -e "\e[00;33m# $version\e[00m\n"
 echo -e "\e[00;31m#########################################################\e[00m"
 }
 
-while true
-do
-   ping -q -c 2 -W 1 $target > /dev/null &&
-     echo "$target Up !"
-     break || 
-     echo "$target Down"
-     sleep 2
-done
-
 # Show version
 version() {
   echo $version
 }
 
-[ -z $target ] && echo "This programm needs an Ip adress"
-
+# Script Options
 while getopts "h?:help:--help:-help:v" opt; do
   case "${opt}" in
     h|help|--help|-help|\?) help; exit ;;
@@ -41,3 +32,20 @@ while getopts "h?:help:--help:-help:v" opt; do
     *) help; exit ;;
   esac
 done
+
+# Make sure there is an ip address
+[ -z $target ] && echo -e "\e[00;31m${b}This programm needs an Ip adress\e[00m" && help && exit 1
+
+# Continuously ping target 
+while true
+do
+   if ping -q -c 2 -W 1 $target > /dev/null;then
+     echo "$target : is up !"
+     break
+   else
+     echo "$target : Seems down :("
+   fi
+ sleep 2
+done
+
+
